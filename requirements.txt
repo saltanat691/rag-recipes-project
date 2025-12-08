@@ -1,0 +1,6 @@
+weaviate-client==4.*
+sentence-transformers==3.*
+transformers==4.*
+torch
+langchain==0.2.*
+langchain-huggingface==0.0.*
