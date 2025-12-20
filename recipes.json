@@ -1,0 +1,239 @@
+[
+  {
+    "id": "r1",
+    "title": "Simple Tomato Spaghetti",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 15 minutes\n\nIngredients:\n- 160 g dried spaghetti\n- 2 tbsp olive oil (30 ml)\n- 2 cloves garlic, finely chopped\n- 400 g canned crushed tomatoes\n- 1/2 tsp salt (3 g)\n- 1/4 tsp black pepper (1 g)\n- 6 fresh basil leaves, torn\n- 20 g grated Parmesan (optional)\n\nInstructions:\n1. Bring 1.5 liters of water to a boil and cook spaghetti for 8–10 minutes.\n2. Heat olive oil and cook garlic for 30–40 seconds.\n3. Add tomatoes, salt, and pepper and simmer for 8 minutes.\n4. Combine pasta with sauce and serve.",
+    "tags": ["pasta", "vegetarian", "quick"],
+    "protein_source": "none",
+    "meal_type": ["lunch", "dinner"]
+  },
+  {
+    "id": "r2",
+    "title": "Creamy Mushroom Pasta",
+    "content": "Serves: 2\nPrep time: 10 minutes\nCook time: 20 minutes\n\nIngredients:\n- 160 g short pasta\n- 200 g mushrooms\n- 150 ml cream\n- 20 g butter\n\nInstructions:\n1. Cook pasta until al dente.\n2. Cook mushrooms in butter.\n3. Add cream and simmer.\n4. Combine with pasta.",
+    "tags": ["pasta", "vegetarian", "creamy"],
+    "protein_source": "none",
+    "meal_type": ["lunch", "dinner"]
+  },
+  {
+    "id": "r3",
+    "title": "Garlic Butter Chicken Thighs",
+    "content": "Serves: 2\nPrep time: 10 minutes\nCook time: 25 minutes\n\nIngredients:\n- 4 chicken thighs\n- 20 g butter\n- 3 cloves garlic\n\nInstructions:\n1. Sear chicken skin-side down.\n2. Flip and cook until internal temp reaches 75°C.\n3. Add butter and garlic and baste.",
+    "tags": ["chicken", "pan", "high-protein"],
+    "protein_source": "chicken",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r4",
+    "title": "Lemon Herb Baked Salmon",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 15 minutes\n\nIngredients:\n- 2 salmon fillets\n- lemon juice\n- herbs\n\nInstructions:\n1. Preheat oven to 200°C.\n2. Season salmon.\n3. Bake 12–15 minutes.",
+    "tags": ["fish", "baked", "healthy"],
+    "protein_source": "fish",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r5",
+    "title": "Vegetable Stir-Fry with Rice",
+    "content": "Serves: 2\nPrep time: 10 minutes\nCook time: 15 minutes\n\nIngredients:\n- mixed vegetables\n- soy sauce\n- rice\n\nInstructions:\n1. Stir-fry vegetables.\n2. Add sauce.\n3. Serve with rice.",
+    "tags": ["vegetarian", "quick", "asian"],
+    "protein_source": "none",
+    "meal_type": ["lunch", "dinner"]
+  },
+  {
+    "id": "r6",
+    "title": "Quick Beef Chili",
+    "content": "Serves: 3\nPrep time: 10 minutes\nCook time: 30 minutes\n\nIngredients:\n- ground beef\n- beans\n- tomatoes\n\nInstructions:\n1. Brown beef.\n2. Add spices and tomatoes.\n3. Simmer 20 minutes.",
+    "tags": ["beef", "one-pot", "high-protein"],
+    "protein_source": "beef",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r8",
+    "title": "Overnight Oats with Berries",
+    "content": "Serves: 1\nPrep time: 5 minutes\nChill time: 6 hours\n\nIngredients:\n- oats\n- milk\n- yogurt\n- berries\n\nInstructions:\n1. Mix ingredients.\n2. Chill overnight.",
+    "tags": ["breakfast", "low-sugar", "no-cook"],
+    "protein_source": "none",
+    "meal_type": ["breakfast"]
+  },
+  {
+    "id": "r9",
+    "title": "Chocolate Mug Cake",
+    "content": "Serves: 1\nPrep time: 5 minutes\nCook time: 1 minute\n\nIngredients:\n- flour\n- cocoa\n- milk\n\nInstructions:\n1. Mix ingredients.\n2. Microwave 45–60 seconds.",
+    "tags": ["dessert", "quick", "sweet"],
+    "protein_source": "none",
+    "meal_type": ["snack", "dessert"]
+  },
+  {
+    "id": "r10",
+    "title": "Banana Pancakes",
+    "content": "Serves: 2\nPrep time: 10 minutes\nCook time: 10 minutes\n\nIngredients:\n- banana\n- egg\n- flour\n\nInstructions:\n1. Mix batter.\n2. Cook pancakes 2–3 minutes per side.",
+    "tags": ["breakfast", "family", "sweet"],
+    "protein_source": "other",
+    "meal_type": ["breakfast"]
+  },
+  {
+    "id": "r11",
+    "title": "Creamy Garlic Parmesan Pasta",
+    "content": "Serves: 2\nPrep time: 10 minutes\nCook time: 20 minutes\n\nIngredients:\n- 160 g pasta\n- 20 g butter\n- 3 cloves garlic\n- 150 ml cream\n- 30 g Parmesan\n\nInstructions:\n1. Cook pasta until al dente.\n2. Melt butter and cook garlic for 30 seconds.\n3. Add cream and simmer 4 minutes.\n4. Combine with pasta and Parmesan.",
+    "tags": ["pasta", "creamy", "quick"],
+    "protein_source": "none",
+    "meal_type": ["lunch", "dinner"]
+  },
+  {
+    "id": "r12",
+    "title": "Tomato Penne with Garlic",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 15 minutes\n\nIngredients:\n- 160 g penne\n- 2 tbsp olive oil\n- 3 cloves garlic\n- 400 g canned tomatoes\n\nInstructions:\n1. Cook penne until al dente.\n2. Cook garlic in olive oil.\n3. Add tomatoes and simmer 8 minutes.\n4. Combine with pasta.",
+    "tags": ["pasta", "vegetarian", "quick"],
+    "protein_source": "none",
+    "meal_type": ["lunch", "dinner"]
+  },
+  {
+    "id": "r13",
+    "title": "Butter and Black Pepper Spaghetti",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 10 minutes\n\nIngredients:\n- 160 g spaghetti\n- 30 g butter\n- black pepper\n\nInstructions:\n1. Cook spaghetti until al dente.\n2. Toss with butter and pepper.",
+    "tags": ["pasta", "vegetarian", "simple"],
+    "protein_source": "none",
+    "meal_type": ["lunch", "dinner"]
+  },
+  {
+    "id": "r14",
+    "title": "Creamy Mushroom Spaghetti",
+    "content": "Serves: 2\nPrep time: 10 minutes\nCook time: 20 minutes\n\nIngredients:\n- 160 g spaghetti\n- 200 g mushrooms\n- 150 ml cream\n\nInstructions:\n1. Cook pasta.\n2. Cook mushrooms.\n3. Add cream and simmer.\n4. Combine with pasta.",
+    "tags": ["pasta", "vegetarian", "creamy"],
+    "protein_source": "none",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r15",
+    "title": "Tomato Basil Fusilli",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 15 minutes\n\nIngredients:\n- 160 g fusilli\n- canned tomatoes\n- basil\n\nInstructions:\n1. Cook fusilli.\n2. Simmer tomatoes 10 minutes.\n3. Add basil and combine.",
+    "tags": ["pasta", "vegetarian", "quick"],
+    "protein_source": "none",
+    "meal_type": ["lunch", "dinner"]
+  },
+
+  {
+    "id": "r16",
+    "title": "Pan-Seared Chicken Breast",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 12 minutes\n\nIngredients:\n- 2 chicken breasts\n- olive oil\n\nInstructions:\n1. Season chicken.\n2. Cook 5–6 minutes per side.\n3. Rest before serving.",
+    "tags": ["chicken", "quick", "high-protein"],
+    "protein_source": "chicken",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r17",
+    "title": "Garlic Lemon Chicken",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 15 minutes\n\nIngredients:\n- chicken breasts\n- garlic\n- lemon juice\n\nInstructions:\n1. Cook chicken.\n2. Add garlic and lemon juice.\n3. Serve hot.",
+    "tags": ["chicken", "quick", "pan"],
+    "protein_source": "chicken",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r18",
+    "title": "Butter Chicken Skillet",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 15 minutes\n\nIngredients:\n- chicken thighs\n- butter\n\nInstructions:\n1. Cook chicken in butter.\n2. Brown both sides.\n3. Rest before serving.",
+    "tags": ["chicken", "pan", "simple"],
+    "protein_source": "chicken",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r19",
+    "title": "Paprika Chicken Thighs",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 20 minutes\n\nIngredients:\n- chicken thighs\n- paprika\n\nInstructions:\n1. Season chicken.\n2. Pan-cook until done.",
+    "tags": ["chicken", "spiced", "pan"],
+    "protein_source": "chicken",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r20",
+    "title": "Simple Baked Chicken",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 25 minutes\n\nIngredients:\n- chicken breasts\n- olive oil\n\nInstructions:\n1. Preheat oven to 200°C.\n2. Bake chicken 22–25 minutes.\n3. Rest before serving.",
+    "tags": ["chicken", "baked", "healthy"],
+    "protein_source": "chicken",
+    "meal_type": ["dinner"]
+  },
+
+  {
+    "id": "r21",
+    "title": "Quick Beef Chili",
+    "content": "Serves: 3\nPrep time: 10 minutes\nCook time: 30 minutes\n\nIngredients:\n- ground beef\n- tomatoes\n- beans\n\nInstructions:\n1. Brown beef.\n2. Add tomatoes and beans.\n3. Simmer 20 minutes.",
+    "tags": ["beef", "one-pot", "high-protein"],
+    "protein_source": "beef",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r22",
+    "title": "Simple Beef Skillet",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 15 minutes\n\nIngredients:\n- sliced beef\n- oil\n\nInstructions:\n1. Heat oil.\n2. Cook beef until browned.",
+    "tags": ["beef", "quick", "pan"],
+    "protein_source": "beef",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r23",
+    "title": "Beef with Onions",
+    "content": "Serves: 2\nPrep time: 10 minutes\nCook time: 20 minutes\n\nIngredients:\n- beef strips\n- onions\n\nInstructions:\n1. Cook onions.\n2. Add beef and cook through.",
+    "tags": ["beef", "pan", "family"],
+    "protein_source": "beef",
+    "meal_type": ["dinner"]
+  },
+
+  {
+    "id": "r24",
+    "title": "Lemon Herb Baked Salmon",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 15 minutes\n\nIngredients:\n- salmon fillets\n- lemon\n\nInstructions:\n1. Preheat oven to 200°C.\n2. Bake salmon 12–15 minutes.",
+    "tags": ["fish", "baked", "healthy"],
+    "protein_source": "fish",
+    "meal_type": ["dinner"]
+  },
+  {
+    "id": "r25",
+    "title": "Pan-Seared Salmon",
+    "content": "Serves: 2\nPrep time: 5 minutes\nCook time: 10 minutes\n\nIngredients:\n- salmon fillets\n- oil\n\nInstructions:\n1. Sear salmon skin-side down.\n2. Flip and finish cooking.",
+    "tags": ["fish", "quick", "pan"],
+    "protein_source": "fish",
+    "meal_type": ["dinner"]
+  },
+
+  {
+    "id": "r26",
+    "title": "Overnight Oats with Honey",
+    "content": "Serves: 1\nPrep time: 5 minutes\nChill time: 6 hours\n\nIngredients:\n- oats\n- milk\n- honey\n\nInstructions:\n1. Mix ingredients.\n2. Chill overnight.",
+    "tags": ["breakfast", "no-cook", "low-sugar"],
+    "protein_source": "none",
+    "meal_type": ["breakfast"]
+  },
+  {
+    "id": "r27",
+    "title": "Vanilla Mug Cake",
+    "content": "Serves: 1\nPrep time: 5 minutes\nCook time: 1 minute\n\nIngredients:\n- flour\n- sugar\n- milk\n\nInstructions:\n1. Mix ingredients.\n2. Microwave 45–60 seconds.",
+    "tags": ["dessert", "quick", "sweet"],
+    "protein_source": "none",
+    "meal_type": ["snack", "dessert"]
+  },
+  {
+    "id": "r28",
+    "title": "Chocolate Banana Mug Cake",
+    "content": "Serves: 1\nPrep time: 5 minutes\nCook time: 1 minute\n\nIngredients:\n- flour\n- banana\n- cocoa\n\nInstructions:\n1. Mix ingredients.\n2. Microwave until set.",
+    "tags": ["dessert", "quick", "sweet"],
+    "protein_source": "none",
+    "meal_type": ["snack", "dessert"]
+  },
+  {
+    "id": "r29",
+    "title": "Berry Yogurt Parfait",
+    "content": "Serves: 1\nPrep time: 5 minutes\n\nIngredients:\n- yogurt\n- berries\n\nInstructions:\n1. Layer yogurt and berries.\n2. Serve chilled.",
+    "tags": ["breakfast", "snack", "healthy"],
+    "protein_source": "none",
+    "meal_type": ["breakfast", "snack"]
+  },
+  {
+    "id": "r30",
+    "title": "Simple Pancakes",
+    "content": "Serves: 2\nPrep time: 10 minutes\nCook time: 10 minutes\n\nIngredients:\n- flour\n- egg\n- milk\n\nInstructions:\n1. Mix batter.\n2. Cook pancakes 2–3 minutes per side.",
+    "tags": ["breakfast", "family", "sweet"],
+    "protein_source": "other",
+    "meal_type": ["breakfast"]
+  }
+]
+

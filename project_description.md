@@ -1,130 +1,171 @@
 
-# RAG Recipe Assistant — Project Description
+# Healthy Family Meal Planner — RAG Project Description
 
-## 1. Main Idea
+## 1. Business Context & Motivation
 
-The goal of this project is to build a Retrieval-Augmented Generation (RAG) system that answers cooking-related questions with precise, factual, recipe-grounded information. The system uses a vector database (Weaviate) to store recipe embeddings and retrieves the most relevant recipe based on a user query. An LLM (OpenAI GPT model) then uses this retrieved context to produce an accurate, recipe-specific answer.
+Families with children who want to eat healthier at home face a recurring problem: daily meal planning creates decision fatigue, and many AI or recipe-based tools fail due to unrealistic assumptions, overly complex recipes, or ungrounded instructions.
 
-This project demonstrates how RAG improves accuracy, reduces hallucinations, and provides domain-specific, grounded responses.
+This project addresses that gap by building a trust-first, recipe-grounded meal planning assistant that helps families maintain balanced, home-cooked meals with minimal daily effort.
 
-## 2. Key Concepts
+The system is explicitly designed for:
+- Beginner-to-intermediate home cooks
+- Limited cooking time (30–60 minutes per meal)
+- Basic kitchen equipment
+- Familiar, locally available ingredients, especially Central Asian–adjacent cuisine
 
-### Retrieval-Augmented Generation (RAG)
-A technique that combines:
-- Retrieval: find relevant documents using vector similarity search
-- Generation: feed retrieved data into an LLM to guide the response  
+The system prioritizes precision, realism, and consistency over creativity or novelty.
 
-### Vector Embeddings
-Text converted into numeric vectors enabling semantic similarity search.
+---
 
-### Vector Database
-Stores vectors and metadata. Implemented using Weaviate v4.
+## 2. Project Goal
 
-### LLM with Context
-The GPT model receives both the user query and the retrieved recipe and generates grounded answers.
+The goal of this project is to build a Retrieval-Augmented Generation (RAG) system that generates coherent weekly meal plans grounded entirely in explicit recipe data.
 
-## 3. Dataset Concept
+Unlike generic recipe chatbots, the system:
+- Does not invent recipes
+- Does not give isolated suggestions
+- Produces a 7-day plan covering breakfast, lunch, dinner, and optional snacks
 
-A custom dataset of 10 structured recipes, each containing:
-- Ingredient quantities (grams, ml, tsp)
-- Prep and cooking times
-- Servings
-- Numbered instruction steps
+All outputs must respect real household constraints and strict variety rules.
 
-Examples:
-- Tomato Spaghetti  
-- Creamy Mushroom Pasta  
-- Garlic Butter Chicken  
-- Vegetable Stir-Fry  
-- Overnight Oats  
-- Chocolate Mug Cake  
-- Banana Pancakes  
-(and more)
+---
 
-Stored as:
+## 3. Target Users
 
-```
+- Families with children
+- Beginner-to-intermediate home cooks
+- Time-constrained households
+- Preference for familiar, non-exotic ingredients
+
+Cooking is treated as a routine necessity, not a hobby.
+
+---
+
+## 4. Key User Constraints
+
+### Time & Effort
+- 30–60 minutes per meal
+- Preference for one-pot meals, batch cooking, and leftover reuse
+
+### Skill Level
+- Beginner-friendly recipes only
+- No advanced culinary techniques
+
+### Equipment
+- Standard home kitchen
+- No specialized appliances
+
+---
+
+## 5. Nutritional Principles
+
+The system follows practical nutrition guidelines, not medical standards.
+
+Primary focus:
+- Higher protein
+- Lower added sugar
+
+Nutrition values are approximate and intended as guidance only.
+
+---
+
+## 6. Weekly Variety Rules (Hard Constraints)
+
+Each weekly plan must enforce:
+- Chicken: max 1 meal per week
+- Fish/seafood: max 1 meal per week
+- Remaining days: meat-based meals
+
+These rules are non-negotiable.
+
+---
+
+## 7. Expected Output
+
+- 7-day weekly meal plan (breakfast, lunch, dinner, optional snacks)
+- Cooking notes (time, difficulty, leftovers)
+- Aggregated grocery list grouped by category
+
+---
+
+## 8. RAG System — Main Idea
+
+The system uses Retrieval-Augmented Generation (RAG) to ensure all outputs are grounded in explicit recipe data stored in a vector database (Weaviate).
+
+The LLM is restricted to retrieved recipes only.
+
+---
+
+## 9. Dataset Concept
+
+The dataset is intentionally small but richly annotated.
+
+### Recipe Schema
+
+Each recipe is stored as structured JSON with the following fields:
+- id
+- title
+- content
+- meal_type
+- diet_tags
+- primary_protein
+- cook_time_min
+- total_time_min
+- difficulty
+- leftovers_ok
+- cuisine
+- grocery_items
+
+### Example Recipe
+
+```json
 {
-  "id": "r1",
-  "title": "Simple Tomato Spaghetti",
-  "content": "... structured recipe ..."
+  "id": "r12",
+  "title": "Tomato Penne with Garlic",
+  "content": "...",
+  "meal_type": ["lunch", "dinner"],
+  "diet_tags": ["low_sugar"],
+  "primary_protein": "none",
+  "cook_time_min": 15,
+  "total_time_min": 20,
+  "difficulty": "easy",
+  "leftovers_ok": true,
+  "cuisine": "central_asian_adjacent",
+  "grocery_items": [
+    { "name": "penne pasta", "qty": 160, "unit": "g", "category": "pantry" },
+    { "name": "canned tomatoes", "qty": 400, "unit": "g", "category": "pantry" }
+  ]
 }
 ```
 
-## 4. System Architecture & Design
+---
 
-### High-Level Flow
-```
-User Query → Embed Query → Vector Search in Weaviate → Retrieve Best Recipe → LLM Generates Final Answer
-```
+## 10. System Architecture
 
-### Components
-- **Embedding Module:** OpenAI embeddings (1536-d vectors)
-- **Vector DB:** Weaviate (Docker), with BYO vectors  
-- **Retrieval:** k=1 or k=4 nearest neighbors  
-- **Generator:** GPT model using strict, grounding prompt  
-- **Baseline LLM:** Generic no-context version for comparison  
-- **CLI Interface**  
+User Query → Embedding → Vector Search (Weaviate) → Retrieved Recipes → Constraint-Aware Prompt → LLM Output
 
-### Prompt Engineering
-RAG is constrained to use:
-- A single best-matching recipe
-- Only information from the dataset
-- No invented ingredients or steps
+---
 
-Baseline LLM intentionally outputs general cooking advice.
+## 11. Evaluation Criteria
 
-## 5. Technical Details
+- Constraint compliance
+- Groundedness (no hallucinations)
+- Practical feasibility
+- Internal consistency
 
-### Tools
-- Python 3.10
-- OpenAI API
-- Weaviate Client v4
-- python-dotenv
+Creativity is explicitly not a primary metric.
 
-### Embedding Model
-- `text-embedding-3-small`
+---
 
-### LLM
-- `gpt-4o-mini` (or similar OpenAI model)
+## 12. Limitations
 
-### Vector Store
-- Weaviate running locally in Docker
-- Schema recreated on startup to ensure consistency
+- Small dataset
+- Approximate nutrition values
+- No personalization
+- CLI-only interface
 
-### Dataset ingestion
-- Runs automatically on script startup
-- Ensures all recipes are embedded and inserted
+---
 
-## 6. Requirements
+## 13. Conclusion
 
-### Functional
-- Retrieve recipes semantically
-- Answer using only retrieved recipe
-- Provide baseline model answer
-- Reject queries outside dataset scope via fallback message
-
-### Non-Functional
-- Deterministic RAG output
-- Simple, readable CLI UX
-- Modular code structure
-
-### Deployment
-- Docker installed
-- Valid OpenAI API key
-- Python environment with dependencies installed
-
-## 7. Limitations
-
-- Dataset limited to 10 recipes
-- System cannot synthesize multi-recipe answers
-- CLI only—no UI
-- Baseline suppression is prompt-based, not capability-based
-
-## 8. Video Demonstration (to be added)
-
-Link to demo video will be inserted here after recording.
-
-## 9. Conclusion
-
-This project demonstrates a clean, modular RAG system using OpenAI embeddings + LLM and Weaviate for vector search. It highlights a clear difference between general LLM answers and grounded RAG answers, making it suitable for academic demonstration or further extension.
+This project demonstrates how a constraint-driven, trust-first RAG system can generate realistic, usable weekly meal plans by prioritizing grounded data over creative freedom.

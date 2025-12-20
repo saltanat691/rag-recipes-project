@@ -148,16 +148,16 @@ measurement of improvements.
 
 Across three independent evaluation runs (K=1):
 
-- Baseline mean MRR@1: 0.429
-- Enhanced mean MRR@1: 0.619
-- Relative improvement: 44.4%
+- Baseline mean MRR@1: 0.522
+- Enhanced mean MRR@1: 0.696
+- Relative improvement: 33.3%
 
 | Metric   | Baseline | Enhanced | Improvement |
 |----------|----------|----------|-------------|
-| MRR@1    | 0.429    | 0.619    | +44.4%      |
-| Recall@1 | 0.429    | 0.619    | +44.4%      |
+| MRR@1    | 0.522    | 0.696    | +33.3%      |
+| Recall@1 | 0.522    | 0.696    | +33.3%      |
 
-Recall@1 improved by the same margin (44.4%), indicating that the enhancement
+Recall@1 improved by the same margin (33.3%), indicating that the enhancement
 improved rank-1 accuracy without reducing retrieval coverage.
 
 The improvement exceeded the required 30% threshold and was stable across all
@@ -171,6 +171,6 @@ metric saturation was identified and addressed through dataset expansion and
 baseline constraint alignment.
 
 With these corrections in place, the application of chunked indexing and
-LLM-based reranking resulted in a stable 44.4% improvement in MRR@1, satisfying
+LLM-based reranking resulted in a stable 33.3% improvement in MRR@1, satisfying
 the acceptance criteria and confirming the effectiveness of the proposed RAG
 enhancements.

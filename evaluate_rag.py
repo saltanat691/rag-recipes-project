@@ -28,6 +28,8 @@ from dotenv import load_dotenv
 import weaviate
 from weaviate.classes.config import Property, DataType, Configure
 from openai import OpenAI
+import json
+from pathlib import Path
 
 load_dotenv()
 
@@ -37,16 +39,18 @@ WEAVIATE_HOST = "localhost"
 WEAVIATE_HTTP_PORT = 8080
 WEAVIATE_GRPC_PORT = 50051
 
-EMBED_MODEL = "text-embedding-3-small"
-RERANK_MODEL = "gpt-4o-mini"
-
-BASE_COLLECTION = "RecipeNote"
-CHUNK_COLLECTION = "RecipeNoteChunk"
-
-IMPROVEMENT_THRESHOLD = 0.30  # 30%
+from src.eval_config import (
+    EMBED_MODEL,
+    RERANK_MODEL,
+    BASE_COLLECTION,
+    CHUNK_COLLECTION,
+    IMPROVEMENT_THRESHOLD,
+)
 
 # ------------------ DATASET ------------------
-from recipes_data import RECIPES
+def load_recipes():
+    return json.loads(Path("recipes.json").read_text(encoding="utf-8"))
+RECIPES = load_recipes()
 
 # ------------------ METRICS ------------------
 
@@ -69,7 +73,7 @@ def safe_improvement(enh: float, base: float) -> float:
 # ------------------ CLIENTS ------------------
 
 @dataclass
-class Clients:
+class EvalClients:
     def __post_init__(self):
         self.client = OpenAI()
 
@@ -136,7 +140,7 @@ def recreate_collection(client, name, properties):
 
 # ------------------ INGESTION ------------------
 
-def ingest_baseline(col, clients: Clients):
+def ingest_baseline(col, clients: EvalClients):
     for r in RECIPES:
         vec = clients.embed(r["title"] + "\n" + r["content"])
         col.data.insert(
@@ -148,28 +152,27 @@ def ingest_baseline(col, clients: Clients):
             vector=vec,
         )
 
-def ingest_chunked(col, clients: Clients):
+def chunk_recipe(recipe: Dict) -> List[Tuple[str, str]]:
+    parts = recipe["content"].split("Instructions:\n", 1)
+    if len(parts) == 2:
+        before, after = parts
+        ingredients = before.strip()
+        instructions = ("Instructions:\n" + after.strip()).strip()
+    else:
+        ingredients = recipe["content"]
+        instructions = recipe["content"]
+
+    if "Ingredients:\n" in ingredients:
+        ingredients = "Ingredients:\n" + ingredients.split("Ingredients:\n", 1)[1].strip()
+
+    return [
+        ("ingredients", ingredients),
+        ("instructions", instructions),
+    ]
+
+def ingest_chunked(col, clients: EvalClients):
     for r in RECIPES:
-        # Very simple deterministic chunking
-        parts = r["content"].split("Instructions:\n", 1)
-        if len(parts) == 2:
-            before, after = parts
-            ingredients = before.strip()
-            instructions = ("Instructions:\n" + after.strip()).strip()
-        else:
-            ingredients = r["content"]
-            instructions = r["content"]
-
-        # Try to keep "Ingredients:" heading
-        if "Ingredients:\n" in ingredients:
-            ingredients = "Ingredients:\n" + ingredients.split("Ingredients:\n", 1)[1].strip()
-
-        chunks = [
-            ("ingredients", ingredients),
-            ("instructions", instructions),
-        ]
-
-        for section, text in chunks:
+        for section, text in chunk_recipe(r):
             vec = clients.embed(f"{r['title']}\nsection:{section}\n{text}")
             col.data.insert(
                 properties={
@@ -194,10 +197,7 @@ def retrieve_baseline(col, qvec, limit=10) -> List[Tuple[str, str]]:
         out.append((obj.properties["note_id"], obj.properties["content"]))
     return out
 
-def retrieve_chunked(col, qvec, limit=20) -> List[Tuple[str, str, str]]:
-    """
-    Returns list of (note_id, section, content) for top chunks.
-    """
+def retrieve_chunked(col, qvec, limit=30):
     res = col.query.near_vector(
         near_vector=qvec,
         limit=limit,
@@ -205,12 +205,15 @@ def retrieve_chunked(col, qvec, limit=20) -> List[Tuple[str, str, str]]:
     )
     out = []
     for obj in res.objects:
+        p = obj.properties
         out.append((
-            obj.properties["note_id"],
-            obj.properties["section"],
-            obj.properties["content"],
+            p["note_id"],
+            p.get("section", "full"),
+            p["content"],
+            p.get("title", "")
         ))
     return out
+
 
 def aggregate_chunks_by_recipe(chunks: List[Tuple[str, str, str]], max_chars_per_recipe=800) -> Dict[str, str]:
     """
@@ -229,10 +232,36 @@ def aggregate_chunks_by_recipe(chunks: List[Tuple[str, str, str]], max_chars_per
         joined[note_id] = text[:max_chars_per_recipe]
     return joined
 
+def select_top_recipes_from_chunks(
+        chunks: List[Tuple[str, str, str, str]],
+        top_recipes: int = 12,
+        max_chars_per_recipe: int = 900,
+) -> List[Dict]:
+    """
+    Pick top recipes based on first occurrence in chunk retrieval list
+    (proxy for nearest distance rank), then build rerank candidates.
+    chunks items: (note_id, section, content, title)
+    returns: list of {"note_id": str, "text": str}
+    """
+    order: List[str] = []
+    per_recipe_parts: Dict[str, List[str]] = {}
+
+    for note_id, section, content, title in chunks:
+        if note_id not in per_recipe_parts:
+            order.append(note_id)
+            per_recipe_parts[note_id] = []
+        per_recipe_parts[note_id].append(f"TITLE: {title}\nSECTION: {section}\n{content}")
+
+    candidates = []
+    for rid in order[:top_recipes]:
+        txt = "\n\n".join(per_recipe_parts[rid])[:max_chars_per_recipe]
+        candidates.append({"note_id": rid, "text": txt})
+    return candidates
+
 # ------------------ EVALUATION ------------------
 
 def run_once(queries, k: int) -> Dict[str, float]:
-    clients = Clients()
+    clients = EvalClients()
     db = connect_db()
 
     try:
@@ -275,11 +304,15 @@ def run_once(queries, k: int) -> Dict[str, float]:
             base_rrs.append(reciprocal_rank(base_ranked_ids, expected, k))
 
             # --- Enhanced: chunked retrieve + per-recipe aggregation + rerank ---
-            chunk_hits = retrieve_chunked(chunk_col, qvec, limit=60)
-            per_recipe_text = aggregate_chunks_by_recipe(chunk_hits, max_chars_per_recipe=800)
+            chunk_hits = retrieve_chunked(chunk_col, qvec, limit=80)
 
-            # Build candidate list for reranker (top recipes by appearance order)
-            candidates = [{"note_id": rid, "text": txt} for rid, txt in per_recipe_text.items()]
+            # Build a smaller, higher-quality candidate set for reranking
+            candidates = select_top_recipes_from_chunks(
+                chunk_hits,
+                top_recipes=12,
+                max_chars_per_recipe=1200,
+            )
+
             ranked_ids = clients.rerank(q["query"], candidates)
 
             enh_recalls.append(recall_at_k(ranked_ids, expected, k))
@@ -307,7 +340,8 @@ def main():
     args = parser.parse_args()
 
     # FIXED EVAL SET (expand this! keep constant across all runs)
-    QUERIES = [
+    QUERIES_RETRIEVAL = [
+        # Retrieval Benchmark
         # Ambiguous pasta queries (should separate r1 vs r2)
         {"query": "I have pasta and garlic. What should I cook for two?", "expected": ["r1"]},
         {"query": "Creamy pasta with mushrooms—how do I make it?", "expected": ["r2"]},
@@ -342,12 +376,40 @@ def main():
         {"query": "mug cake microwave seconds", "expected": ["r9"]},
         {"query": "choc mug cake microwvave 45 or 60 sec", "expected": ["r9"]},
         {"query": "сколько секунд готовить кекс в кружке?", "expected": ["r9"]},
+        {"query": "Quick beef chili: after adding tomatoes and beans, exactly how many minutes should it simmer?", "expected": ["r6"]},
+        {"query": "Overnight oats: what is the minimum chill time in hours?", "expected": ["r8"]},
+
+    ]
+
+    QUERIES_PROJECT = [
+        # Planning Benchmark
+        {"query": "For a healthy family breakfast, how long should overnight oats chill?", "expected": ["r8"]},
+        {"query": "Low-sugar breakfast: what are the exact amounts for overnight oats?", "expected": ["r8"]},
+        {"query": "Breakfast for kids: how long do I cook banana pancakes on each side?", "expected": ["r10"]},
+        {"query": "What ingredients do I need for banana pancakes, with quantities?", "expected": ["r10"]},
+
+        {"query": "Chicken night (only once this week): what internal temperature should chicken thighs reach?", "expected": ["r3"]},
+        {"query": "Chicken thighs: how long do I sear skin-side down?", "expected": ["r3"]},
+
+        {"query": "Fish night (only once this week): what oven temperature do I bake salmon at?", "expected": ["r4"]},
+        {"query": "How many minutes do I bake salmon fillets in the oven?", "expected": ["r4"]},
+
+        {"query": "Meat-based dinner: what spices are in the quick beef chili?", "expected": ["r6"]},
+        {"query": "Quick beef chili: how long should it simmer after adding beans?", "expected": ["r6"]},
+
+        {"query": "Weeknight pasta: how long should I simmer tomatoes for simple tomato spaghetti?", "expected": ["r1"]},
+        {"query": "Creamy mushroom pasta: how many ml of cream does it use?", "expected": ["r2"]},
+        {"query": "Vegetable stir-fry: how long do I stir-fry the vegetables before adding soy sauce?", "expected": ["r5"]},
+
+        {"query": "Tomato garlic pasta: how many minutes do I simmer the tomatoes?", "expected": ["r1", "r12", "r35", "r36", "r37"]},
+        {"query": "Chocolate mug cake: should I microwave 45 seconds or 60 seconds?", "expected": ["r9", "r46", "r47", "r48"]},
+
     ]
 
 
     results = []
     for i in range(args.runs):
-        r = run_once(QUERIES, k=args.k)
+        r = run_once(QUERIES_RETRIEVAL, k=args.k)
         results.append(r)
         print(f"\n=== RUN {i+1}/{args.runs} (K={args.k}) ===")
         print(f"Baseline  Recall@{args.k}: {r['baseline_recall']:.3f}   MRR@{args.k}: {r['baseline_mrr']:.3f}")
